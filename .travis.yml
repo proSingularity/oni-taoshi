@@ -1,0 +1,43 @@
+sudo: false
+language: node_js
+node_js:
+  - "11"
+
+services:
+  - docker
+
+env:
+  - DOCKER_REPO='fursorger' URL='http://localhost:8080'
+
+install:
+  - npm install
+script:
+  - npm run build
+  - npm run test:coverage
+  - docker-compose up -d
+  - sleep 2
+  - curl "${URL}"
+after_success:
+  - npm install codecov
+  - npx codecov
+
+before_deploy:
+  # HACK: Delete "build" from gitignore because github pages uses `git add --all`
+  - ./deployment/delete-build-dir-from-gitignore.sh
+deploy:
+  - provider: heroku
+    app: fursorger-game
+    api_key: ${HEROKU_API_KEY}
+    keep_history: true
+    skip_cleanup: true
+    on:
+      all_branches: true
+  - provider: pages
+    github_token: ${GITHUB_TOKEN} # Set in the settings page of travis repository, as a secure variable
+    keep_history: true
+    skip_cleanup: true
+    on:
+      branch: master
+after_deploy:
+  - ./deployment/push-to-docker-hub.sh "${TRAVIS_BRANCH}-${TRAVIS_JOB_NUMBER}"
+  - if [ ${TRAVIS_BRANCH} == "master" ]; then ./deployment/push-to-docker-hub.sh 'latest'; fi
