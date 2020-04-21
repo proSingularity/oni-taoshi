@@ -7,6 +7,6 @@ export class BgmScene extends Scene {
     }
 
     public create() {
-        this.sound.add("background").play("", { loop: true, volume: 0.5 });
+        // this.sound.add("background").play("", { loop: true, volume: 0.5 });
     }
 }

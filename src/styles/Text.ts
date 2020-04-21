@@ -2,9 +2,13 @@ import { GameObjects } from "phaser";
 import { Color } from "./Color";
 
 export const TextConfig = {
+    xl: {
+        font: "128px Gothic",
+        fill: "#ffffff",
+    },
     lg: {
         font: "32px Gothic",
-        fill: "#000000",
+        fill: "#ffffff",
     },
     sm: {
         font: "16px Gothic",

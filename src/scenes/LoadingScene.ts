@@ -2,8 +2,8 @@ import { GameObjects, Scene } from "phaser";
 import { setLevel } from "../registry/level";
 import { Color, toHex } from "../styles/Color";
 import { setDefaultTextStyle } from "../styles/Text";
+import { BattleScene } from "./BattleScene";
 import { BgmScene } from "./BgmScene";
-import { TitleScene } from "./TitleScene";
 
 export class LoadingScene extends Scene {
     private halfWidth!: number;
@@ -23,6 +23,16 @@ export class LoadingScene extends Scene {
         this.addTitles();
         this.makeLoadingBar();
         setLevel(this.registry, 0);
+    }
+
+    private preloadAllAssets() {
+        this.load.image("oni", "./assets/images/oni799x940.jpg");
+        this.load.image("oni-defeated", "./assets/images/oni-defeated.jpg");
+        this.load.image("player00", "./assets/images/bandana-dude.png");
+        this.load.image("player01", "./assets/images/esper.png");
+        this.load.image("player02", "./assets/images/kiddo.png");
+        this.load.image("player03", "./assets/images/blonde.png");
+        this.load.image("player04", "./assets/images/schwarzkopf.png");
     }
 
     private makeLoadingBar() {
@@ -62,7 +72,7 @@ export class LoadingScene extends Scene {
         this.load.on("fileprogress", this.getAssetTextWriter(assetText));
         this.load.on("complete", () => {
             this.scene.add("BgmScene", BgmScene, true);
-            this.scene.add("Title", TitleScene, true);
+            this.scene.add("BattleScene", BattleScene, true);
             this.scene.remove(this);
         });
     }
@@ -90,42 +100,9 @@ export class LoadingScene extends Scene {
         };
     }
 
-    private preloadAllAssets() {
-        this.load.image(
-            "rectangleButton",
-            " ./assets/images/blank_rectangle60x160.png"
-        );
-        this.load.image("goodEnd", "./assets/images/goodEnd1280×853.jpg");
-        this.load.image("badEnd", "./assets/images/badEnd640x512.jpg");
-        this.load.image("city", "./assets/images/town-01-inkarnate387x295.png");
-        this.load.image(
-            "background",
-            "./assets/images/map-inkarnate1024x768.png"
-        );
-        this.load.image("backpack", "./assets/images/backpack64x64.png");
-        this.load.image("plus", "./assets/images/plus64x64.png");
-        this.load.image("minus", "./assets/images/minus64x64.png");
-        this.load.image("hourglass", "./assets/images/hourglass64x64.png");
-        this.load.image("background2", "./assets/images/background500x300.png");
-        this.load.image(
-            "buildFactory",
-            "./assets/images/buildFactoryButton128x128.png"
-        );
-        this.load.image("balloon", "./assets/images/balloon1600x1600.png");
-        this.load.svg("restart", "./assets/images/reload64x64.svg");
-        this.load.image("stock", "./assets/images/storage64x64.png");
-        this.load.image(
-            "production",
-            "./assets/images/decreasing-bars64x64.png"
-        );
-        this.load.image("play", "./assets/images/playArrow300x200.png");
-        this.load.image("export", "./assets/images/export180x120.png");
-        this.load.audio("background", "./assets/sounds/bgm.mp3");
-    }
-
     private addTitles() {
         const title = this.add
-            .text(this.halfWidth, this.halfHeight - 200, "Fursorger")
+            .text(this.halfWidth, this.halfHeight - 200, "鬼倒し")
             .setOrigin(0.5);
         setDefaultTextStyle(title);
         title.setFontSize(112);

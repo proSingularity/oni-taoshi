@@ -1,42 +1,30 @@
-export interface ICity {
-    name: string;
-    stock: number;
-    production: number;
-    x: number;
-    y: number;
-}
-
-export interface IPlayer {
-    stock: number;
-    location: string;
-    id: string;
-}
+import { Oni } from './Oni';
+import { Player } from './Player';
 
 export class Game {
-    public cities: ICity[] = [
-        { name: 'Ustrela', stock: 4, production: -1, x: 520, y: 655 },
-        { name: 'Ablesh', stock: 6, production: -1, x: 811, y: 395 },
-        { name: 'Eflar', stock: 6, production: -1, x: 540, y: 282 },
-    ];
-    public travelPaths: Array<{ first: string; second: string }> = [
-        { first: 'Ustrela', second: 'Ablesh' },
-        { first: 'Ablesh', second: 'Eflar' },
-    ];
-    public background: string = 'background';
-    public player = {
-        stock: 3,
-        location: 'Ablesh',
-    };
-    public players: Map<string, IPlayer> = new Map();
+    public players: { [key: string]: Player } = {};
+    public timer = 0;
 
-    constructor(playerIds: string[]) {
-        playerIds.forEach(id => {
-            const player: IPlayer = {
-                stock: 3,
-                location: 'Ustrela',
-                id,
-            };
-            this.players.set(id, player);
-        });
+    constructor(public oni: Oni) {}
+
+    public hit(playerId: string) {
+        if (this.timer === 0) {
+            this.timer += 1;
+            setInterval(() => {
+                this.timer += 1;
+            }, 1000);
+        }
+        const player = this.players[playerId];
+        this.oni.takeDamage(player.damage);
+    }
+
+    public addPlayer(id) {
+        this.players[id] = new Player(id);
+        console.log(this.players);
+    }
+
+    public removePlayer(id) {
+        delete this.players[id];
+        console.log(this.players);
     }
 }

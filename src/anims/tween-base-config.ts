@@ -1,9 +1,9 @@
-import { GameObjects } from "phaser";
+import { GameObjects, Types } from "phaser";
 
-export const getBasicTweenConfig = (targets: GameObjects.Image) => ({
+export const getBasicTweenConfig = (
+    targets: GameObjects.Image
+): Types.Tweens.TweenBuilderConfig => ({
     targets,
-    scaleX: targets.scaleX * 1.4,
-    scaleY: targets.scaleY * 1.4,
     ease: "Linear",
     repeat: -1, // -1: infinity
     yoyo: true,

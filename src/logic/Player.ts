@@ -1,43 +1,44 @@
-import { Graph } from "graphlib";
-import { ILocation } from "./ILocation";
-import { IPlayer } from "./IPlayer";
+import { random } from "lodash";
+import { GameObjects, Scene } from "phaser";
+import { getBasicTweenConfig } from "../anims/tween-base-config";
+import { Color, toHex } from "../styles/Color";
 
-export class Player implements IPlayer {
-    constructor(
-        private graph: Graph,
-        private location: ILocation,
-        public stock: number,
-        public turn = 0,
-        public factories = 0
-    ) {}
-
-    public take(): void {
-        if (this.location.economy.stock > 0) {
-            this.stock += 1;
-            this.location.economy.stock -= 1;
-        }
+export class Player extends GameObjects.Sprite {
+    constructor(scene: Scene, public id: string) {
+        super(
+            scene,
+            random(50, 300),
+            random(150, 400),
+            getRandomPlayerTexture()
+        );
+        scene.add.existing(this);
+        this.setFlipX(true);
     }
 
-    public store(): void {
-        if (this.stock > 0) {
-            this.stock -= 1;
-            this.location.economy.stock += 1;
-        }
+    public hit() {
+        this.scene.tweens.add({
+            ...getBasicTweenConfig(this),
+            duration: 30,
+            x: this.x + 10,
+            repeat: 0,
+        });
     }
 
-    public setLocation(location: ILocation): void {
-        this.location = location;
-        this.turn++;
-        if (this.turn % 3 === 0 && this.turn > 0) {
-            this.factories++;
-        }
-    }
-
-    public getLocation() {
-        return this.location;
-    }
-
-    public getLocationName() {
-        return this.location.name;
+    public mark() {
+        const graphics = this.scene.add.graphics({
+            lineStyle: { width: 2, color: toHex(Color.YellowCorn) },
+            fillStyle: { color: 0xff0000 },
+        });
+        const rect = new Phaser.Geom.Rectangle(
+            this.x - this.width / 2,
+            this.y - this.height / 2,
+            this.width,
+            this.height
+        );
+        graphics.strokeRectShape(rect);
     }
 }
+
+const getRandomPlayerTexture = () => {
+    return `player0${random(4)}`;
+};
