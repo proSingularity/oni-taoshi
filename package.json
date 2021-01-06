@@ -55,7 +55,7 @@
         "webpack-dev-server": "3.8.2"
     },
     "dependencies": {
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "file-saver": "^2.0.2",
         "graphlib": "^2.1.7",
         "lodash": "^4.17.13",
