@@ -58,7 +58,7 @@
         "axios": "^0.19.2",
         "file-saver": "^2.0.2",
         "graphlib": "^2.1.7",
-        "lodash": "^4.17.13",
+        "lodash": "^4.17.21",
         "ms": "^2.1.2",
         "phaser": "^3.18.1",
         "socket.io-client": "^2.3.0"
